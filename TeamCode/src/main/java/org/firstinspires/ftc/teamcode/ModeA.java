@@ -51,7 +51,36 @@ public class ModeA extends LinearOpMode {
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
-
+        /*
+        telemetry.addData("Start position", motorTest.getCurrentPosition());
+        telemetry.update();
+        motorTest.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorTest.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motorTest.setTargetPosition(100);
+        motorTest.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        motorTest.setPower(0.5);
+        while (opModeIsActive() && motorTest.isBusy()) {
+            telemetry.addData("Current position", motorTest.getCurrentPosition());
+            telemetry.update();
+        }
+        motorTest.setPower(0);
+        motorTest.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        telemetry.addData("Path", "Complete");
+        telemetry.update();
+        sleep(1000);
+        */
+        /*
+        motorTest.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorTest.setTargetPosition(100);
+        motorTest.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        motorTest.setPower(0.5);
+        while(motorTest.isBusy()) {
+            telemetry.addData("Motor position", motorTest.getCurrentPosition());
+            telemetry.update();
+        }
+        motorTest.setPower(0);
+        motorTest.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        */
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
 
