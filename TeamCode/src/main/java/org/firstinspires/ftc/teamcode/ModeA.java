@@ -23,7 +23,7 @@ public class ModeA extends LinearOpMode {
     private DcMotor motorTest;
     private DigitalChannel digitalTouch;
     //private DistanceSensor sensorColorRange;
-    private ColorSensor sensorColor;
+    //private ColorSensor sensorColor;
     private DistanceSensor sensorDistance;
     private Servo servoTest;
 
@@ -42,7 +42,7 @@ public class ModeA extends LinearOpMode {
         motorTest = hardwareMap.get(DcMotor.class, "motorTest");
         //digitalTouch = hardwareMap.get(DigitalChannel.class, "digitalTouch");
         //sensorColorRange = hardwareMap.get(DistanceSensor.class, "sensorColorRange");
-        sensorColor = hardwareMap.get(ColorSensor.class, "sensorColor");
+        //sensorColor = hardwareMap.get(ColorSensor.class, "sensorColor");
         sensorDistance = hardwareMap.get(DistanceSensor.class, "sensorDistance");
         servoTest = hardwareMap.get(Servo.class, "servoTest");
 
@@ -108,7 +108,7 @@ public class ModeA extends LinearOpMode {
             telemetry.addData("Roll: ", angles.secondAngle);
             telemetry.addData("Pitch: ", angles.thirdAngle);
 
-            telemetry.addData("Color", sensorColor.alpha());
+            //telemetry.addData("Color", sensorColor.alpha());
 
             telemetry.addData("Distance (cm)", sensorDistance.getDistance(DistanceUnit.CM));
 
