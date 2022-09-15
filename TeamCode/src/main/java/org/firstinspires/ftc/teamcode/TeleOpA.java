@@ -17,7 +17,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 @TeleOp
-public class ModeA extends LinearOpMode {
+public class TeleOpA extends LinearOpMode {
 
     private Gyroscope imu;
     private DcMotor motorTest;
