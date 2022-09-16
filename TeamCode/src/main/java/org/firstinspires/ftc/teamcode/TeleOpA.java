@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.ColorRangeSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
@@ -61,32 +60,12 @@ public class TeleOpA extends LinearOpMode {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
-        // set digital channel to input mode.
-        //touchSensor.setMode(DigitalChannel.Mode.INPUT);
-
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
-        /*
-        telemetry.addData("Start position", motorTest.getCurrentPosition());
-        telemetry.update();
-        motorTest.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorTest.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        motorTest.setTargetPosition(100);
-        motorTest.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        motorTest.setPower(0.5);
-        while (opModeIsActive() && motorTest.isBusy()) {
-            telemetry.addData("Current position", motorTest.getCurrentPosition());
-            telemetry.update();
-        }
-        motorTest.setPower(0);
-        motorTest.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        telemetry.addData("Path", "Complete");
-        telemetry.update();
-        sleep(1000);
-        */
+
         /*
         motorTest.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorTest.setTargetPosition(100);
+        motorTest.setTargetPosition(10000);
         motorTest.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         motorTest.setPower(0.5);
         while(motorTest.isBusy()) {
@@ -96,6 +75,7 @@ public class TeleOpA extends LinearOpMode {
         motorTest.setPower(0);
         motorTest.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         */
+
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
 
