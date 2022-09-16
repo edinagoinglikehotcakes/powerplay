@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
@@ -18,10 +19,27 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 @TeleOp
 public class TeleOpA extends LinearOpMode {
 
+    /*
+    Robot Configuration
+
+    Motors
+    - Port 0 - Tetrix Motor - motorTest
+    Servos
+    - Port 0 - Servo - servoTest
+    Digital Devices
+    - Port 1 - REV Touch Sensor - touchSensor
+    I2C Bus 0
+    - Port 0 - REV internal IMU (BNO055) - imu
+    I2C Bus 2
+    - Port 0 - REV 2M Distance Sensor - distanceSensor
+    I2C Bus 3
+    - Port 0 - REV Color/Range Sensor - colorRangeSensor
+    */
+
     private BNO055IMU imu;
     private Orientation angles;
     private DcMotor motorTest;
-    private DigitalChannel digitalTouch;
+    private TouchSensor touchSensor;
     private ColorRangeSensor colorRangeSensor;
     private DistanceSensor distanceSensor;
     private Servo servoTest;
@@ -35,13 +53,16 @@ public class TeleOpA extends LinearOpMode {
         imu.initialize(parameters);
 
         motorTest = hardwareMap.get(DcMotor.class, "motorTest");
-        //digitalTouch = hardwareMap.get(DigitalChannel.class, "digitalTouch");
+        touchSensor = hardwareMap.get(TouchSensor.class, "touchSensor");
         colorRangeSensor = hardwareMap.get(ColorRangeSensor.class, "colorRangeSensor");
         distanceSensor = hardwareMap.get(DistanceSensor.class, "distanceSensor");
         servoTest = hardwareMap.get(Servo.class, "servoTest");
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
+
+        // set digital channel to input mode.
+        //touchSensor.setMode(DigitalChannel.Mode.INPUT);
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
@@ -109,6 +130,8 @@ public class TeleOpA extends LinearOpMode {
             telemetry.addData("Range (cm)", colorRangeSensor.getDistance(DistanceUnit.CM));
 
             telemetry.addData("Distance (cm)", distanceSensor.getDistance(DistanceUnit.CM));
+
+            telemetry.addData("Pressed", touchSensor.isPressed());
 
             telemetry.addData("Status", "Running");
 
