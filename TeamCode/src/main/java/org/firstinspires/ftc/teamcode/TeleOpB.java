@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
-import com.qualcomm.robotcore.hardware.Gyroscope;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -25,7 +24,7 @@ public class TeleOpB extends LinearOpMode {
     public void runOpMode() {
         motorTest = hardwareMap.get(DcMotor.class, "motorTest");
         servoTest = hardwareMap.get(Servo.class, "servoTest");
-        distanceSensor = hardwareMap.get(DistanceSensor.class, "sensorDistance");
+        distanceSensor = hardwareMap.get(DistanceSensor.class, "distanceSensor");
         //
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;

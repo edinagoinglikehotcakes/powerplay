@@ -3,11 +3,10 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.qualcomm.robotcore.hardware.ColorRangeSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
-import com.qualcomm.robotcore.hardware.Gyroscope;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -19,31 +18,26 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 @TeleOp
 public class TeleOpA extends LinearOpMode {
 
-    private Gyroscope imu;
+    private BNO055IMU imu;
+    private Orientation angles;
     private DcMotor motorTest;
     private DigitalChannel digitalTouch;
-    //private DistanceSensor sensorColorRange;
-    //private ColorSensor sensorColor;
-    private DistanceSensor sensorDistance;
+    private ColorRangeSensor colorRangeSensor;
+    private DistanceSensor distanceSensor;
     private Servo servoTest;
 
     @Override
     public void runOpMode() {
-
-        BNO055IMU imu;
-        Orientation angles;
 
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
         imu = hardwareMap.get(BNO055IMU.class,"imu");
         imu.initialize(parameters);
 
-        //imu = hardwareMap.get(Gyroscope.class, "imu");
         motorTest = hardwareMap.get(DcMotor.class, "motorTest");
         //digitalTouch = hardwareMap.get(DigitalChannel.class, "digitalTouch");
-        //sensorColorRange = hardwareMap.get(DistanceSensor.class, "sensorColorRange");
-        //sensorColor = hardwareMap.get(ColorSensor.class, "sensorColor");
-        sensorDistance = hardwareMap.get(DistanceSensor.class, "sensorDistance");
+        colorRangeSensor = hardwareMap.get(ColorRangeSensor.class, "colorRangeSensor");
+        distanceSensor = hardwareMap.get(DistanceSensor.class, "distanceSensor");
         servoTest = hardwareMap.get(Servo.class, "servoTest");
 
         telemetry.addData("Status", "Initialized");
@@ -108,9 +102,13 @@ public class TeleOpA extends LinearOpMode {
             telemetry.addData("Roll: ", angles.secondAngle);
             telemetry.addData("Pitch: ", angles.thirdAngle);
 
-            //telemetry.addData("Color", sensorColor.alpha());
+            telemetry.addData("Red", colorRangeSensor.red());
+            telemetry.addData("Green", colorRangeSensor.green());
+            telemetry.addData("Blue", colorRangeSensor.blue());
+            telemetry.addData("Alpha", colorRangeSensor.alpha());
+            telemetry.addData("Range (cm)", colorRangeSensor.getDistance(DistanceUnit.CM));
 
-            telemetry.addData("Distance (cm)", sensorDistance.getDistance(DistanceUnit.CM));
+            telemetry.addData("Distance (cm)", distanceSensor.getDistance(DistanceUnit.CM));
 
             telemetry.addData("Status", "Running");
 
