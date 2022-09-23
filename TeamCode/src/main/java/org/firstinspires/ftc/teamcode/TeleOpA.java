@@ -40,6 +40,7 @@ public class TeleOpA extends LinearOpMode {
     - Port 0 - REV 2M Distance Sensor - distanceSensor
     I2C Bus 3
     - Port 0 - REV Color/Range Sensor - colorRangeSensor
+    Webcam 1
     */
 
     /*
