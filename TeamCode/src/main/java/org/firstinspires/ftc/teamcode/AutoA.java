@@ -11,31 +11,57 @@ public class AutoA extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         waitForStart();
-        run(false);
-        run(true);
+        run(Direction.Forward, 5000);
+        run(Direction.Left, 10000);
+        run(Direction.Right, 10000);
+        run(Direction.Back, 5000);
     }
 
-    void run(boolean left){
+    enum Direction{
+        Left,
+        Right,
+        Forward,
+        Back
+    }
+    void run(Direction direction, int targetPosition) throws InterruptedException {
 
         DcMotor motorBackLeft = hardwareMap.get(DcMotor.class, "motorBackLeft");
         DcMotor motorBackRight = hardwareMap.get(DcMotor.class, "motorBackRight");
         DcMotor motorFrontLeft = hardwareMap.get(DcMotor.class, "motorFrontLeft");
         DcMotor motorFrontRight = hardwareMap.get(DcMotor.class, "motorFrontRight");
 
-        motorFrontRight.setDirection(DcMotorSimple.Direction.REVERSE);
-        motorBackRight.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        if (left){
-            motorBackRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        if (direction == Direction.Left){
+            motorBackLeft.setDirection(DcMotorSimple.Direction.FORWARD);
+            motorBackRight.setDirection(DcMotorSimple.Direction.FORWARD);
             motorFrontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+            motorFrontRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        }
+        else if (direction == Direction.Forward){
+            motorBackLeft.setDirection(DcMotorSimple.Direction.FORWARD);
+            motorBackRight.setDirection(DcMotorSimple.Direction.REVERSE);
+            motorFrontLeft.setDirection(DcMotorSimple.Direction.FORWARD);
+            motorFrontRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        }
+        else if (direction == Direction.Right){
+            motorBackLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+            motorBackRight.setDirection(DcMotorSimple.Direction.REVERSE);
+            motorFrontLeft.setDirection(DcMotorSimple.Direction.FORWARD);
+            motorFrontRight.setDirection(DcMotorSimple.Direction.FORWARD);
+        }
+        else if (direction == Direction.Back){
+            motorBackLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+            motorBackRight.setDirection(DcMotorSimple.Direction.FORWARD);
+            motorFrontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+            motorFrontRight.setDirection(DcMotorSimple.Direction.FORWARD);
+        }
+        else{
+            throw new InterruptedException("Direction Unrecognized");
         }
 
         motorBackLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorBackRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorFrontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorFrontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        int targetPosition = 10000;
 
         motorBackLeft.setTargetPosition(targetPosition);
         motorBackRight.setTargetPosition(targetPosition);
