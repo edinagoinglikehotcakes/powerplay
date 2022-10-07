@@ -12,9 +12,9 @@ public class AutoA extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         waitForStart();
         run(Direction.Forward, 5000);
-        run(Direction.Left, 10000);
-        run(Direction.Right, 10000);
-        run(Direction.Back, 5000);
+        //run(Direction.Left, 10000);
+        //run(Direction.Right, 10000);
+        //run(Direction.Back, 5000);
     }
 
     enum Direction{
