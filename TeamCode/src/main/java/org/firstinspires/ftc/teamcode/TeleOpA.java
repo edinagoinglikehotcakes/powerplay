@@ -99,7 +99,8 @@ public class TeleOpA extends LinearOpMode {
 
         //testHardware();
         //testMotorEncoder();
-        testTensorFlow();
+        //testTensorFlow();
+        testRevCoreHexMotor();
 
     }
 
@@ -275,6 +276,56 @@ public class TeleOpA extends LinearOpMode {
         // Use loadModelFromFile() if you have downloaded a custom team model to the Robot Controller's FLASH.
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABELS);
         // tfod.loadModelFromFile(TFOD_MODEL_FILE, LABELS);
+    }
+
+    private void testRevCoreHexMotor() {
+
+        // Configuring the robot:
+        //
+        // Run the driver station app
+        // From the menu, choose configure robot
+        // Tap edit
+        // Tap control hub portal
+        // Tap control hub
+        // Tap motors
+        // For the appropriate port, select REV Robotics Core Hex Motor
+        // In the name box, enter hexMotor
+        // Tap the checkmark
+        // Tap done three times
+        // Tap save
+        // Tap ok
+        // Tap back
+
+        DcMotor motor = hardwareMap.get(DcMotor.class, "hexMotor");
+
+        telemetry.addData("Status", "Initialized");
+        telemetry.update();
+
+        waitForStart();
+
+        /*
+        while (opModeIsActive()) {
+            double targetPower = -this.gamepad1.left_stick_y;
+            motor.setPower(targetPower);
+            double actualPower = motor.getPower();
+            telemetry.addData("Status", "Running");
+            telemetry.addData("Power", actualPower);
+            telemetry.update();
+        }
+        */
+
+        motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motor.setTargetPosition(1000);
+        motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        motor.setPower(0.5);
+        while(motor.isBusy()) {
+            telemetry.addData("Status", "Running");
+            telemetry.addData("Position", motor.getCurrentPosition());
+            telemetry.update();
+        }
+        motor.setPower(0);
+        motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
     }
 
 }
