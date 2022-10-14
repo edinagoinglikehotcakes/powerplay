@@ -100,7 +100,8 @@ public class TeleOpA extends LinearOpMode {
         //testHardware();
         //testMotorEncoder();
         //testTensorFlow();
-        testRevCoreHexMotor();
+        //testRevCoreHexMotor();
+        testLimitSwitch();
 
     }
 
@@ -325,6 +326,46 @@ public class TeleOpA extends LinearOpMode {
         }
         motor.setPower(0);
         motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+    }
+
+    private void testLimitSwitch() {
+
+        // REV - Magnetic Limit Switch
+        // https://www.revrobotics.com/rev-31-1462/
+
+        // REV - Magnetic Limit Switch - Application Examples
+        // https://docs.revrobotics.com/magnetic-limit-switch/application-examples
+
+        // Configuring the robot:
+        //
+        // Run the driver station app
+        // From the menu, choose configure robot
+        // Tap edit
+        // Tap control hub portal
+        // Tap control hub
+        // Tap digital devices
+        // For the appropriate port, select REV Touch Sensor
+        // In the name box, enter limitSwitch
+        // Tap the checkmark
+        // Tap done three times
+        // Tap save
+        // Tap ok
+        // Tap back
+
+        TouchSensor limitSwitch = hardwareMap.get(TouchSensor.class, "limitSwitch");
+
+        telemetry.addData("Status", "Initialized");
+        telemetry.update();
+
+        waitForStart();
+
+        while (opModeIsActive()) {
+            boolean isPressed = limitSwitch.isPressed();
+            telemetry.addData("Status", "Running");
+            telemetry.addData("Pressed", isPressed);
+            telemetry.update();
+        }
 
     }
 
