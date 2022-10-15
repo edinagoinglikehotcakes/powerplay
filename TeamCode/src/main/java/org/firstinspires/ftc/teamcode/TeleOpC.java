@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp
 public class TeleOpC extends LinearOpMode {
@@ -16,6 +17,7 @@ public class TeleOpC extends LinearOpMode {
         DcMotor motorFrontRight = hardwareMap.dcMotor.get("motorFrontRight");
         DcMotor motorBackRight = hardwareMap.dcMotor.get("motorBackRight");
         DcMotor motorLift = hardwareMap.dcMotor.get("motorLift");
+        Servo servoClaw = hardwareMap.get(Servo.class, "servoClaw");
 
         // Reverse the right side motors
         // Reverse left motors if you are using NeveRests
@@ -45,6 +47,13 @@ public class TeleOpC extends LinearOpMode {
             }
             else {
                 motorLift.setPower(0);
+            }
+
+            if (gamepad1.y) {
+                servoClaw.setPosition(1);
+            }
+            if (gamepad1.x) {
+                servoClaw.setPosition(0);
             }
 
             motorFrontLeft.setPower(frontLeftPower);
