@@ -18,7 +18,8 @@ public class TeleOpD extends LinearOpMode {
         while (opModeIsActive()) {
             double power = -gamepad1.left_stick_y;
             hexMotor.setPower(power);
-            telemetry.addData("Power", hexMotor.getPower());
+            telemetry.addData("Target Power", power);
+            telemetry.addData("Actual Power", hexMotor.getPower());
             telemetry.addData("Pressed", touchSensor.isPressed());
             telemetry.update();
         }
