@@ -15,6 +15,7 @@ public class TeleOpC extends LinearOpMode {
         DcMotor motorBackLeft = hardwareMap.dcMotor.get("motorBackLeft");
         DcMotor motorFrontRight = hardwareMap.dcMotor.get("motorFrontRight");
         DcMotor motorBackRight = hardwareMap.dcMotor.get("motorBackRight");
+        DcMotor motorLift = hardwareMap.dcMotor.get("motorLift");
 
         // Reverse the right side motors
         // Reverse left motors if you are using NeveRests
@@ -38,6 +39,13 @@ public class TeleOpC extends LinearOpMode {
             double backLeftPower = (y - x + rx) / denominator;
             double frontRightPower = (y - x - rx) / denominator;
             double backRightPower = (y + x - rx) / denominator;
+
+            if (gamepad1.a) {
+                motorLift.setPower(0.5);
+            }
+            else {
+                motorLift.setPower(0);
+            }
 
             motorFrontLeft.setPower(frontLeftPower);
             motorBackLeft.setPower(backLeftPower);
