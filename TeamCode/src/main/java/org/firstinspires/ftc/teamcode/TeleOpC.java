@@ -5,24 +5,30 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 
 @TeleOp
 public class TeleOpC extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
-        // Declare our motors
-        // Make sure your ID's match your configuration
+
         DcMotor motorFrontLeft = hardwareMap.dcMotor.get("motorFrontLeft");
         DcMotor motorBackLeft = hardwareMap.dcMotor.get("motorBackLeft");
         DcMotor motorFrontRight = hardwareMap.dcMotor.get("motorFrontRight");
         DcMotor motorBackRight = hardwareMap.dcMotor.get("motorBackRight");
         DcMotor motorLift = hardwareMap.dcMotor.get("motorLift");
         Servo servoClaw = hardwareMap.get(Servo.class, "servoClaw");
+        TouchSensor limitSwitch = hardwareMap.get(TouchSensor.class, "limitSwitch");
 
-        // Reverse the right side motors
-        // Reverse left motors if you are using NeveRests
+        boolean hasPressed = false;
+
+        motorLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
         motorFrontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         motorBackLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        telemetry.addData("Status", "Initialized");
+        telemetry.update();
 
         waitForStart();
 
@@ -42,11 +48,33 @@ public class TeleOpC extends LinearOpMode {
             double frontRightPower = (y - x - rx) / denominator;
             double backRightPower = (y + x - rx) / denominator;
 
-            if (gamepad1.a) {
-                motorLift.setPower(0.5);
+            boolean isPressed = limitSwitch.isPressed();
+            if (isPressed) {
+                hasPressed = true;
+                motorLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             }
+
+            int motorLiftPosition = motorLift.getCurrentPosition();
+
+            if (hasPressed) {
+                // If lift is being raised
+                if (gamepad1.a && motorLiftPosition < 1000) {
+                    motorLift.setDirection(DcMotorSimple.Direction.FORWARD);
+                    motorLift.setPower(0.5);
+                }
+                // If lift is being lowered
+                else if (gamepad1.b && motorLiftPosition > 0) {
+                    motorLift.setDirection(DcMotorSimple.Direction.REVERSE);
+                    motorLift.setPower(0.5);
+                }
+                // If lift is stopped
+                else {
+                    motorLift.setPower(0);
+                }
+            }
+
             else {
-                motorLift.setPower(0);
+                telemetry.addData("Limit Switch", "Hasn't been pressed");
             }
 
             if (gamepad1.y) {
@@ -60,6 +88,14 @@ public class TeleOpC extends LinearOpMode {
             motorBackLeft.setPower(backLeftPower);
             motorFrontRight.setPower(frontRightPower);
             motorBackRight.setPower(backRightPower);
+
+            double servoClawPosition = servoClaw.getPosition();
+
+            telemetry.addData("Status", "Running");
+            telemetry.addData("Lift", motorLiftPosition);
+            telemetry.addData("Pressed", isPressed);
+            telemetry.addData("Servo", servoClawPosition);
+            telemetry.update();
         }
     }
 }
