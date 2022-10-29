@@ -12,7 +12,7 @@ public class TeleOpD extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
 
         DcMotor motorLift = hardwareMap.dcMotor.get("motorLift");
-        TouchSensor touchSensor = hardwareMap.get(TouchSensor.class, "touchSensor");
+        TouchSensor limitSwitch = hardwareMap.get(TouchSensor.class, "limitSwitch");
         Servo servoClaw = hardwareMap.get(Servo.class, "servoClaw");
 
         waitForStart();
@@ -29,7 +29,7 @@ public class TeleOpD extends LinearOpMode {
             double servoClawPosition = servoClaw.getPosition();
             telemetry.addData("Target Power", power);
             telemetry.addData("Actual Power", motorLift.getPower());
-            telemetry.addData("Pressed", touchSensor.isPressed());
+            telemetry.addData("Pressed", limitSwitch.isPressed());
             telemetry.addData("Servo", servoClawPosition);
             telemetry.update();
         }

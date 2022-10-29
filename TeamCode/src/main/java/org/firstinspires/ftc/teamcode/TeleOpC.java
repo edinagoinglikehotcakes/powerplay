@@ -21,6 +21,8 @@ public class TeleOpC extends LinearOpMode {
         TouchSensor limitSwitch = hardwareMap.get(TouchSensor.class, "limitSwitch");
 
         boolean hasPressed = false;
+        boolean clawOpen = false;
+        boolean bDown = false;
 
         motorLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
@@ -38,6 +40,27 @@ public class TeleOpC extends LinearOpMode {
             double y = -gamepad1.left_stick_y; // Remember, this is reversed!
             double x = gamepad1.left_stick_x * 1.1; // Counteract imperfect strafing
             double rx = gamepad1.right_stick_x;
+            boolean isLiftDown = limitSwitch.isPressed();
+            boolean isLiftUp = motorLift.getCurrentPosition() > 200;
+
+            if (isLiftDown) {
+                motorLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                motorLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                hasPressed = true;
+            }
+
+            if (hasPressed) {
+                if (gamepad1.y && !isLiftUp) {
+                    motorLift.setPower(0.1);
+                } else if (gamepad1.a && !isLiftDown) {
+                    motorLift.setPower(-0.1);
+                } else {
+                    motorLift.setPower(0);
+                }
+            }
+            else {
+                telemetry.addData("Limit Switch", "Hasn't been pressed");
+            }
 
             // Denominator is the largest motor power (absolute value) or 1
             // This ensures all the powers maintain the same ratio, but only when
@@ -48,40 +71,21 @@ public class TeleOpC extends LinearOpMode {
             double frontRightPower = (y - x - rx) / denominator;
             double backRightPower = (y + x - rx) / denominator;
 
-            boolean isPressed = limitSwitch.isPressed();
-            if (isPressed) {
-                hasPressed = true;
-                motorLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            }
-
             int motorLiftPosition = motorLift.getCurrentPosition();
 
-            if (hasPressed) {
-                // If lift is being raised
-                if (gamepad1.a && motorLiftPosition < 1000) {
-                    motorLift.setDirection(DcMotorSimple.Direction.FORWARD);
-                    motorLift.setPower(0.5);
-                }
-                // If lift is being lowered
-                else if (gamepad1.b && motorLiftPosition > 0) {
-                    motorLift.setDirection(DcMotorSimple.Direction.REVERSE);
-                    motorLift.setPower(0.5);
-                }
-                // If lift is stopped
-                else {
-                    motorLift.setPower(0);
+            if (gamepad1.b) {
+                if (!bDown) {
+                    if (clawOpen) {
+                        servoClaw.setPosition(0.75);
+                    } else {
+                        servoClaw.setPosition(0.6);
+                    }
+                    clawOpen = !clawOpen;
+                    bDown = true;
                 }
             }
-
             else {
-                telemetry.addData("Limit Switch", "Hasn't been pressed");
-            }
-
-            if (gamepad1.y) {
-                servoClaw.setPosition(1);
-            }
-            if (gamepad1.x) {
-                servoClaw.setPosition(0);
+                bDown = false;
             }
 
             motorFrontLeft.setPower(frontLeftPower);
@@ -89,12 +93,11 @@ public class TeleOpC extends LinearOpMode {
             motorFrontRight.setPower(frontRightPower);
             motorBackRight.setPower(backRightPower);
 
-            double servoClawPosition = servoClaw.getPosition();
-
+            telemetry.addData("Actual Lift Power", motorLift.getPower());
             telemetry.addData("Status", "Running");
             telemetry.addData("Lift", motorLiftPosition);
-            telemetry.addData("Pressed", isPressed);
-            telemetry.addData("Servo", servoClawPosition);
+            telemetry.addData("Pressed", isLiftDown);
+            telemetry.addData("Servo", servoClaw.getPosition());
             telemetry.update();
         }
     }
