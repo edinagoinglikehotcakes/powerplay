@@ -12,6 +12,23 @@ public class TeleOpC extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
+        // Hardware Configuration
+        // - Webcam 1
+        // - Control Hub Portal
+        //   - Control Hub
+        //     - Motors
+        //       - Port 0: motorFrontLeft (Tetrix Motor)
+        //       - Port 1: motorFrontRight (Tetrix Motor)
+        //       - Port 2: motorBackLeft (Tetrix Motor)
+        //       - Port 3: motorBackRight (Tetrix Motor)
+        //     - Servos
+        //       - Port 0: servoClaw (Servo)
+        //   - Expansion Hub 3
+        //     - Motors
+        //       - Port 0: motorLift (Tetrix Motor)
+        //     - Digital Devices
+        //       - Port 1: limitSwitch (REV Touch Sensor)
+
         DcMotor motorFrontLeft = hardwareMap.dcMotor.get("motorFrontLeft");
         DcMotor motorBackLeft = hardwareMap.dcMotor.get("motorBackLeft");
         DcMotor motorFrontRight = hardwareMap.dcMotor.get("motorFrontRight");
@@ -38,10 +55,17 @@ public class TeleOpC extends LinearOpMode {
 
         while (opModeIsActive()) {
             double y = -gamepad1.left_stick_y; // Remember, this is reversed!
-            double x = gamepad1.left_stick_x * 1.1; // Counteract imperfect strafing
+            double x = gamepad1.left_stick_x * 1.1; // Counteract imperfect strafing.
             double rx = gamepad1.right_stick_x;
+
+            // Check if lift is all the way down.
             boolean isLiftDown = limitSwitch.isPressed();
-            boolean isLiftUp = motorLift.getCurrentPosition() > 200;
+
+            // Get the lift position.
+            int motorLiftPosition = motorLift.getCurrentPosition();
+
+            // Check if lift is all the way up.
+            boolean isLiftUp = motorLiftPosition > 200;
 
             if (isLiftDown) {
                 motorLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -50,13 +74,32 @@ public class TeleOpC extends LinearOpMode {
             }
 
             if (hasPressed) {
+
+                // If the user is pressing y and the lift is not all the way up...
                 if (gamepad1.y && !isLiftUp) {
-                    motorLift.setPower(0.1);
-                } else if (gamepad1.a && !isLiftDown) {
-                    motorLift.setPower(-0.1);
-                } else {
+                    if (motorLiftPosition < 50){
+                        motorLift.setPower(0.2);
+                    }
+                    else {
+                        motorLift.setPower(0.1);
+                    }
+                }
+
+                // If the user is pressing a and the lift is not all the way down...
+                else if (gamepad1.a && !isLiftDown) {
+                    if (motorLiftPosition < 50){
+                        motorLift.setPower(-0.025);
+                    }
+                    else {
+                        motorLift.setPower(-0.1);
+                    }
+                }
+
+                // If the user isn't pressing y or a...
+                else {
                     motorLift.setPower(0);
                 }
+
             }
             else {
                 telemetry.addData("Limit Switch", "Hasn't been pressed");
@@ -70,8 +113,6 @@ public class TeleOpC extends LinearOpMode {
             double backLeftPower = (y - x + rx) / denominator;
             double frontRightPower = (y - x - rx) / denominator;
             double backRightPower = (y + x - rx) / denominator;
-
-            int motorLiftPosition = motorLift.getCurrentPosition();
 
             if (gamepad1.b) {
                 if (!bDown) {
