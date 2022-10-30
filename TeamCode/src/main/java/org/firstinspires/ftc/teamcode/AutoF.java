@@ -31,7 +31,6 @@ public class AutoF extends LinearOpMode {
     // UNITS ARE METERS
     double tagsize = 0.166;
 
-    int numFramesWithoutDetection = 0;
     @Override
     public void runOpMode() throws InterruptedException {
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
@@ -68,41 +67,19 @@ public class AutoF extends LinearOpMode {
             ArrayList<AprilTagDetection> detections = aprilTagDetectionPipeline.getDetectionsUpdate();
 
             // If there's been a new frame...
-
             if(detections != null)
             {
-                telemetry.addData("FPS", camera.getFps());
-                telemetry.addData("Overhead ms", camera.getOverheadTimeMs());
-                telemetry.addData("Pipeline ms", camera.getPipelineTimeMs());
-
-                // If we don't see any tags
-                if(detections.size() == 0)
+                for(AprilTagDetection detection : detections)
                 {
-                    numFramesWithoutDetection++;
-                }
-                // We do see tags!
-                else
-                {
-                    numFramesWithoutDetection = 0;
-
-                    for(AprilTagDetection detection : detections)
-                    {
-                        telemetry.addLine(String.format("\nDetected tag ID=%d", detection.id));
-                        telemetry.addLine(String.format("Translation X: %.2f feet", detection.pose.x*FEET_PER_METER));
-                        telemetry.addLine(String.format("Translation Y: %.2f feet", detection.pose.y*FEET_PER_METER));
-                        telemetry.addLine(String.format("Translation Z: %.2f feet", detection.pose.z*FEET_PER_METER));
-                        telemetry.addLine(String.format("Rotation Yaw: %.2f degrees", Math.toDegrees(detection.pose.yaw)));
-                        telemetry.addLine(String.format("Rotation Pitch: %.2f degrees", Math.toDegrees(detection.pose.pitch)));
-                        telemetry.addLine(String.format("Rotation Roll: %.2f degrees", Math.toDegrees(detection.pose.roll)));
-                        if (!ran) {
-                            ran = true;
-                            if (detection.id == 225) {
-                                run(AutoA.Direction.Left, 5000);
-                            } else if (detection.id == 224) {
-                                run(AutoA.Direction.Forward, 5000);
-                            } else if (detection.id == 223) {
-                                run(AutoA.Direction.Right, 5000);
-                            }
+                    telemetry.addLine(String.format("\nDetected tag ID=%d", detection.id));
+                    if (!ran) {
+                        ran = true;
+                        if (detection.id == 573) {
+                            run(AutoA.Direction.Left, 5000);
+                        } else if (detection.id == 136) {
+                            run(AutoA.Direction.Forward, 5000);
+                        } else if (detection.id == 127) {
+                            run(AutoA.Direction.Right, 5000);
                         }
                     }
                 }
