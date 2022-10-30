@@ -18,6 +18,11 @@ public class AutoF extends LinearOpMode {
     OpenCvCamera camera;
     AprilTagDetectionPipeline aprilTagDetectionPipeline;
     static final double FEET_PER_METER = 3.28084;
+    static final int DRAGON_ID = 573;
+    static final int FIREBALL_ID = 136;
+    static final int SKULL_ID = 127;
+    static final int FORWARD_TICKS = 1000;
+    static final int STRAFE_TICKS = 1000;
 
     // Lens intrinsics
     // UNITS ARE PIXELS
@@ -74,12 +79,14 @@ public class AutoF extends LinearOpMode {
                     telemetry.addLine(String.format("\nDetected tag ID=%d", detection.id));
                     if (!ran) {
                         ran = true;
-                        if (detection.id == 573) {
-                            run(AutoA.Direction.Left, 5000);
-                        } else if (detection.id == 136) {
-                            run(AutoA.Direction.Forward, 5000);
-                        } else if (detection.id == 127) {
-                            run(AutoA.Direction.Right, 5000);
+                        if (detection.id == DRAGON_ID) {
+                            run(AutoA.Direction.Forward, FORWARD_TICKS);
+                            run(AutoA.Direction.Left, STRAFE_TICKS);
+                        } else if (detection.id == FIREBALL_ID) {
+                            run(AutoA.Direction.Forward, FORWARD_TICKS);
+                        } else if (detection.id == SKULL_ID) {
+                            run(AutoA.Direction.Forward, FORWARD_TICKS);
+                            run(AutoA.Direction.Right, STRAFE_TICKS);
                         }
                     }
                 }
@@ -155,10 +162,10 @@ public class AutoF extends LinearOpMode {
 
             telemetry.addData("target position ", targetPosition);
 
-            telemetry.addData("Motor back left :)(:", motorBackLeft.getCurrentPosition());
-            telemetry.addData("Motor back right :)(:", motorBackRight.getCurrentPosition());
-            telemetry.addData("Motor front left :)(:", motorFrontLeft.getCurrentPosition());
-            telemetry.addData("Motor front right :)(:", motorFrontRight.getCurrentPosition());
+            telemetry.addData("Motor back left", motorBackLeft.getCurrentPosition());
+            telemetry.addData("Motor back right", motorBackRight.getCurrentPosition());
+            telemetry.addData("Motor front left", motorFrontLeft.getCurrentPosition());
+            telemetry.addData("Motor front right", motorFrontRight.getCurrentPosition());
 
             telemetry.update();
 
