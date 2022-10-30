@@ -21,8 +21,8 @@ public class AutoF extends LinearOpMode {
     static final int DRAGON_ID = 573;
     static final int FIREBALL_ID = 136;
     static final int SKULL_ID = 127;
-    static final int FORWARD_TICKS = 1000;
-    static final int STRAFE_TICKS = 1000;
+    static final int FORWARD_TICKS = 3000;
+    static final int STRAFE_TICKS = 3000;
 
     // Lens intrinsics
     // UNITS ARE PIXELS
@@ -111,28 +111,28 @@ public class AutoF extends LinearOpMode {
         DcMotor motorFrontRight = hardwareMap.get(DcMotor.class, "motorFrontRight");
 
         if (direction == AutoA.Direction.Left){
-            motorBackLeft.setDirection(DcMotorSimple.Direction.FORWARD);
-            motorBackRight.setDirection(DcMotorSimple.Direction.FORWARD);
-            motorFrontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-            motorFrontRight.setDirection(DcMotorSimple.Direction.REVERSE);
+            motorBackLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+            motorBackRight.setDirection(DcMotorSimple.Direction.REVERSE);
+            motorFrontLeft.setDirection(DcMotorSimple.Direction.FORWARD);
+            motorFrontRight.setDirection(DcMotorSimple.Direction.FORWARD);
         }
         else if (direction == AutoA.Direction.Forward){
-            motorBackLeft.setDirection(DcMotorSimple.Direction.FORWARD);
-            motorBackRight.setDirection(DcMotorSimple.Direction.REVERSE);
-            motorFrontLeft.setDirection(DcMotorSimple.Direction.FORWARD);
-            motorFrontRight.setDirection(DcMotorSimple.Direction.REVERSE);
-        }
-        else if (direction == AutoA.Direction.Right){
-            motorBackLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-            motorBackRight.setDirection(DcMotorSimple.Direction.REVERSE);
-            motorFrontLeft.setDirection(DcMotorSimple.Direction.FORWARD);
-            motorFrontRight.setDirection(DcMotorSimple.Direction.FORWARD);
-        }
-        else if (direction == AutoA.Direction.Back){
             motorBackLeft.setDirection(DcMotorSimple.Direction.REVERSE);
             motorBackRight.setDirection(DcMotorSimple.Direction.FORWARD);
             motorFrontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
             motorFrontRight.setDirection(DcMotorSimple.Direction.FORWARD);
+        }
+        else if (direction == AutoA.Direction.Right){
+            motorBackLeft.setDirection(DcMotorSimple.Direction.FORWARD);
+            motorBackRight.setDirection(DcMotorSimple.Direction.FORWARD);
+            motorFrontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+            motorFrontRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        }
+        else if (direction == AutoA.Direction.Back){
+            motorBackLeft.setDirection(DcMotorSimple.Direction.FORWARD);
+            motorBackRight.setDirection(DcMotorSimple.Direction.REVERSE);
+            motorFrontLeft.setDirection(DcMotorSimple.Direction.FORWARD);
+            motorFrontRight.setDirection(DcMotorSimple.Direction.REVERSE);
         }
         else{
             throw new InterruptedException("Direction Unrecognized");
@@ -161,7 +161,6 @@ public class AutoF extends LinearOpMode {
         while(motorBackLeft.isBusy() || motorBackRight.isBusy() || motorFrontLeft.isBusy() || motorFrontRight.isBusy()) {
 
             telemetry.addData("target position ", targetPosition);
-
             telemetry.addData("Motor back left", motorBackLeft.getCurrentPosition());
             telemetry.addData("Motor back right", motorBackRight.getCurrentPosition());
             telemetry.addData("Motor front left", motorFrontLeft.getCurrentPosition());
