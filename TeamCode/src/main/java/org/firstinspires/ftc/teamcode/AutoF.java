@@ -21,8 +21,7 @@ public class AutoF extends LinearOpMode {
     static final int DRAGON_ID = 573;
     static final int FIREBALL_ID = 136;
     static final int SKULL_ID = 127;
-    static final int FORWARD_TICKS = 3000;
-    static final int STRAFE_TICKS = 3000;
+    static final int TICKS = 3200;
 
     // Lens intrinsics
     // UNITS ARE PIXELS
@@ -80,13 +79,13 @@ public class AutoF extends LinearOpMode {
                     if (!ran) {
                         ran = true;
                         if (detection.id == DRAGON_ID) {
-                            run(AutoA.Direction.Forward, FORWARD_TICKS);
-                            run(AutoA.Direction.Left, STRAFE_TICKS);
+                            run(AutoA.Direction.Forward, TICKS);
+                            run(AutoA.Direction.Left, TICKS);
                         } else if (detection.id == FIREBALL_ID) {
-                            run(AutoA.Direction.Forward, FORWARD_TICKS);
+                            run(AutoA.Direction.Forward, TICKS);
                         } else if (detection.id == SKULL_ID) {
-                            run(AutoA.Direction.Forward, FORWARD_TICKS);
-                            run(AutoA.Direction.Right, STRAFE_TICKS);
+                            run(AutoA.Direction.Forward, TICKS);
+                            run(AutoA.Direction.Right, TICKS);
                         }
                     }
                 }
