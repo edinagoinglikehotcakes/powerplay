@@ -65,7 +65,7 @@ public class TeleOpC extends LinearOpMode {
             int motorLiftPosition = motorLift.getCurrentPosition();
 
             // Check if lift is all the way up.
-            boolean isLiftUp = motorLiftPosition > 200;
+            boolean isLiftUp = motorLiftPosition > 1800;
 
             if (isLiftDown) {
                 motorLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
