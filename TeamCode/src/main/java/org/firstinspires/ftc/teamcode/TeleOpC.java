@@ -21,11 +21,11 @@ public class TeleOpC extends LinearOpMode {
         //       - Port 1: motorFrontRight (Tetrix Motor)
         //       - Port 2: motorBackLeft (Tetrix Motor)
         //       - Port 3: motorBackRight (Tetrix Motor)
-        //     - Servos
-        //       - Port 0: servoClaw (Servo)
         //   - Expansion Hub 3
         //     - Motors
         //       - Port 0: motorLift (Tetrix Motor)
+        //     - Servos
+        //       - Port 0: servoClaw (Servo)
         //     - Digital Devices
         //       - Port 1: limitSwitch (REV Touch Sensor)
 
