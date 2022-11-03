@@ -42,6 +42,7 @@ public class TeleOpC extends LinearOpMode {
         boolean bDown = false;
 
         motorLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motorLift.setDirection(DcMotorSimple.Direction.REVERSE);
 
         motorFrontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         motorBackLeft.setDirection(DcMotorSimple.Direction.REVERSE);
