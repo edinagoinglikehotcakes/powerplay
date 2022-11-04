@@ -29,6 +29,8 @@ public class TeleOpC extends LinearOpMode {
         //     - Digital Devices
         //       - Port 1: limitSwitch (REV Touch Sensor)
 
+        final double TURTLE_FACTOR = 4;
+
         DcMotor motorFrontLeft = hardwareMap.dcMotor.get("motorFrontLeft");
         DcMotor motorBackLeft = hardwareMap.dcMotor.get("motorBackLeft");
         DcMotor motorFrontRight = hardwareMap.dcMotor.get("motorFrontRight");
@@ -73,32 +75,33 @@ public class TeleOpC extends LinearOpMode {
                 motorLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 hasPressed = true;
             }
-
+            double liftPower = 0;
             if (hasPressed) {
+
 
                 // If the user is pressing y and the lift is not all the way up...
                 if (gamepad1.y && !isLiftUp) {
                     if (motorLiftPosition < 50){
-                        motorLift.setPower(0.2);
+                        liftPower = 0.4;
                     }
                     else {
-                        motorLift.setPower(0.1);
+                        liftPower = 0.2;
                     }
                 }
 
                 // If the user is pressing a and the lift is not all the way down...
                 else if (gamepad1.a && !isLiftDown) {
                     if (motorLiftPosition < 50){
-                        motorLift.setPower(-0.025);
+                        liftPower = -0.05;
                     }
                     else {
-                        motorLift.setPower(-0.1);
+                        liftPower = -0.2;
                     }
                 }
 
                 // If the user isn't pressing y or a...
                 else {
-                    motorLift.setPower(0);
+                    liftPower = 0;
                 }
 
             }
@@ -114,7 +117,13 @@ public class TeleOpC extends LinearOpMode {
             double backLeftPower = (y - x + rx) / denominator;
             double frontRightPower = (y - x - rx) / denominator;
             double backRightPower = (y + x - rx) / denominator;
-
+            if (gamepad1.x) {
+                liftPower /= TURTLE_FACTOR;
+                frontLeftPower /= TURTLE_FACTOR;
+                backLeftPower /= TURTLE_FACTOR;
+                frontRightPower /= TURTLE_FACTOR;
+                backRightPower /= TURTLE_FACTOR;
+            }
             if (gamepad1.b) {
                 if (!bDown) {
                     if (clawOpen) {
@@ -129,7 +138,7 @@ public class TeleOpC extends LinearOpMode {
             else {
                 bDown = false;
             }
-
+            motorLift.setPower(liftPower);
             motorFrontLeft.setPower(frontLeftPower);
             motorBackLeft.setPower(backLeftPower);
             motorFrontRight.setPower(frontRightPower);
