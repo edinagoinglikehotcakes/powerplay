@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.openftc.apriltag.AprilTagDetection;
@@ -37,6 +38,7 @@ public class AutoF extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
+        Servo servoClaw = hardwareMap.get(Servo.class, "servoClaw");
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
         aprilTagDetectionPipeline = new AprilTagDetectionPipeline(tagsize, fx, fy, cx, cy);
@@ -59,6 +61,8 @@ public class AutoF extends LinearOpMode {
         });
 
         waitForStart();
+
+        servoClaw.setPosition(0.8);
 
         telemetry.setMsTransmissionInterval(50);
         boolean ran = false;
