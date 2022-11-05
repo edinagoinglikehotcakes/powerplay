@@ -76,38 +76,36 @@ public class TeleOpC extends LinearOpMode {
                 hasPressed = true;
             }
             double liftPower = 0;
-            if (hasPressed) {
 
-
-                // If the user is pressing y and the lift is not all the way up...
-                if (gamepad1.y && !isLiftUp) {
-                    if (motorLiftPosition < 50){
+            // If the user is pressing y and the lift is not all the way up...
+            if (gamepad1.y && !isLiftUp) {
+                if (hasPressed) {
+                    if (motorLiftPosition < 50) {
                         liftPower = 0.4;
-                    }
-                    else {
+                    } else {
                         liftPower = 0.2;
                     }
                 }
-
-                // If the user is pressing a and the lift is not all the way down...
-                else if (gamepad1.a && !isLiftDown) {
-                    if (motorLiftPosition < 50){
-                        liftPower = -0.05;
-                    }
-                    else {
-                        liftPower = -0.2;
-                    }
-                }
-
-                // If the user isn't pressing y or a...
                 else {
-                    liftPower = 0;
+                    telemetry.addData("Warning", "Must lower lift before raising");
                 }
+            }
 
+            // If the user is pressing a and the lift is not all the way down...
+            else if (gamepad1.a && !isLiftDown) {
+                if (motorLiftPosition < 50){
+                    liftPower = -0.05;
+                }
+                else {
+                    liftPower = -0.2;
+                }
             }
+
+            // If the user isn't pressing y or a...
             else {
-                telemetry.addData("Limit Switch", "Hasn't been pressed");
+                liftPower = 0;
             }
+
 
             // Denominator is the largest motor power (absolute value) or 1
             // This ensures all the powers maintain the same ratio, but only when
@@ -117,7 +115,7 @@ public class TeleOpC extends LinearOpMode {
             double backLeftPower = (y - x + rx) / denominator;
             double frontRightPower = (y - x - rx) / denominator;
             double backRightPower = (y + x - rx) / denominator;
-            if (gamepad1.x) {
+            if (gamepad1.right_trigger > 0.2) {
                 liftPower /= TURTLE_FACTOR;
                 frontLeftPower /= TURTLE_FACTOR;
                 backLeftPower /= TURTLE_FACTOR;
@@ -127,7 +125,7 @@ public class TeleOpC extends LinearOpMode {
             if (gamepad1.b) {
                 if (!bDown) {
                     if (clawOpen) {
-                        servoClaw.setPosition(0.75);
+                        servoClaw.setPosition(0.8);
                     } else {
                         servoClaw.setPosition(0.6);
                     }
