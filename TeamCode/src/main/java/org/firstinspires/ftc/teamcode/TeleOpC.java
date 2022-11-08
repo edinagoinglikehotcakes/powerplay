@@ -29,7 +29,7 @@ public class TeleOpC extends LinearOpMode {
         //     - Digital Devices
         //       - Port 1: limitSwitch (REV Touch Sensor)
 
-        final double TURTLE_FACTOR = 4;
+        final double TURTLE_FACTOR = 3;
 
         DcMotor motorFrontLeft = hardwareMap.dcMotor.get("motorFrontLeft");
         DcMotor motorBackLeft = hardwareMap.dcMotor.get("motorBackLeft");
