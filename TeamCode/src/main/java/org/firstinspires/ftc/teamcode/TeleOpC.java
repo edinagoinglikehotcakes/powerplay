@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -39,6 +40,10 @@ public class TeleOpC extends LinearOpMode {
         Servo servoClaw = hardwareMap.get(Servo.class, "servoClaw");
         TouchSensor limitSwitch = hardwareMap.get(TouchSensor.class, "limitSwitch");
 
+        BNO055IMU imu = hardwareMap.get(BNO055IMU.class, "imu");
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        imu.initialize(parameters);
+
         boolean hasPressed = false;
         boolean clawOpen = false;
         boolean bDown = false;
@@ -60,6 +65,12 @@ public class TeleOpC extends LinearOpMode {
             double y = -gamepad1.left_stick_y; // Remember, this is reversed!
             double x = gamepad1.left_stick_x * 1.1; // Counteract imperfect strafing.
             double rx = gamepad1.right_stick_x;
+
+            // Read inverse IMU heading, as the IMU heading is CW positive
+            double botHeading = -imu.getAngularOrientation().firstAngle;
+
+            double rotX = x * Math.cos(botHeading) - y * Math.sin(botHeading);
+            double rotY = x * Math.sin(botHeading) + y * Math.cos(botHeading);
 
             // Check if lift is all the way down.
             boolean isLiftDown = limitSwitch.isPressed();
@@ -106,15 +117,14 @@ public class TeleOpC extends LinearOpMode {
                 liftPower = 0;
             }
 
-
             // Denominator is the largest motor power (absolute value) or 1
             // This ensures all the powers maintain the same ratio, but only when
             // at least one is out of the range [-1, 1]
             double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
-            double frontLeftPower = (y + x + rx) / denominator;
-            double backLeftPower = (y - x + rx) / denominator;
-            double frontRightPower = (y - x - rx) / denominator;
-            double backRightPower = (y + x - rx) / denominator;
+            double frontLeftPower = (rotY + rotX + rx) / denominator;
+            double backLeftPower = (rotY - rotX + rx) / denominator;
+            double frontRightPower = (rotY - rotX - rx) / denominator;
+            double backRightPower = (rotY + rotX - rx) / denominator;
             if (gamepad1.right_trigger > 0.2) {
                 liftPower /= TURTLE_FACTOR;
                 frontLeftPower /= TURTLE_FACTOR;
@@ -147,6 +157,7 @@ public class TeleOpC extends LinearOpMode {
             telemetry.addData("Lift", motorLiftPosition);
             telemetry.addData("Pressed", isLiftDown);
             telemetry.addData("Servo", servoClaw.getPosition());
+            telemetry.addData("Heading", botHeading);
             telemetry.update();
         }
     }
