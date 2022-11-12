@@ -30,7 +30,8 @@ public class TeleOpC extends LinearOpMode {
         //     - Digital Devices
         //       - Port 1: limitSwitch (REV Touch Sensor)
 
-        final double TURTLE_FACTOR = 3;
+        final double WHEEL_TURTLE_FACTOR = 3;
+        final double LIFT_TURTLE_FACTOR = 12;
 
         DcMotor motorFrontLeft = hardwareMap.dcMotor.get("motorFrontLeft");
         DcMotor motorBackLeft = hardwareMap.dcMotor.get("motorBackLeft");
@@ -91,11 +92,7 @@ public class TeleOpC extends LinearOpMode {
             // If the user is pressing y and the lift is not all the way up...
             if (gamepad1.y && !isLiftUp) {
                 if (hasPressed) {
-                    if (motorLiftPosition < 50) {
-                        liftPower = 0.4;
-                    } else {
-                        liftPower = 0.2;
-                    }
+                    liftPower = 0.8;
                 }
                 else {
                     telemetry.addData("Warning", "Must lower lift before raising");
@@ -105,10 +102,10 @@ public class TeleOpC extends LinearOpMode {
             // If the user is pressing a and the lift is not all the way down...
             else if (gamepad1.a && !isLiftDown) {
                 if (motorLiftPosition < 50){
-                    liftPower = -0.05;
+                    liftPower = -0.1;
                 }
                 else {
-                    liftPower = -0.2;
+                    liftPower = -0.8;
                 }
             }
 
@@ -126,11 +123,11 @@ public class TeleOpC extends LinearOpMode {
             double frontRightPower = (rotY - rotX - rx) / denominator;
             double backRightPower = (rotY + rotX - rx) / denominator;
             if (gamepad1.right_trigger > 0.2) {
-                liftPower /= TURTLE_FACTOR;
-                frontLeftPower /= TURTLE_FACTOR;
-                backLeftPower /= TURTLE_FACTOR;
-                frontRightPower /= TURTLE_FACTOR;
-                backRightPower /= TURTLE_FACTOR;
+                liftPower /= LIFT_TURTLE_FACTOR;
+                frontLeftPower /= WHEEL_TURTLE_FACTOR;
+                backLeftPower /= WHEEL_TURTLE_FACTOR;
+                frontRightPower /= WHEEL_TURTLE_FACTOR;
+                backRightPower /= WHEEL_TURTLE_FACTOR;
             }
             if (gamepad1.b) {
                 if (!bDown) {
