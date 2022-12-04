@@ -132,7 +132,7 @@ public class TeleOpC extends LinearOpMode {
             if (gamepad1.b) {
                 if (!bDown) {
                     if (clawOpen) {
-                        servoClaw.setPosition(0.8);
+                        servoClaw.setPosition(0.9);
                     } else {
                         servoClaw.setPosition(0.6);
                     }
